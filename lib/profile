@@ -1,0 +1,2 @@
+prompt='-> '
+fn cd { builtin cd $1 && awd $sysname }

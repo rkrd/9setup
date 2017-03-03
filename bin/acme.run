@@ -1,0 +1,52 @@
+#!/bin/sh
+#acme settings
+COLS=3
+MOUNT=$HOME/mnt/acme
+
+export BROWSER='firefox'
+PLAN9=/usr/local/plan9
+
+pgrep plumber
+if [ "$?" != "0" ];
+then
+    plumb.sh
+fi
+
+# Plumb files instead of starting new editor.
+EDITOR=E
+unset FCEDIT VISUAL
+TERM=dumb
+
+# Get rid of backspace characters in Unix man output.
+PAGER=nobs
+
+# Default font for Plan 9 programs.
+#font=$PLAN9/font/lucsans/euro.8.font
+font=$PLAN9/font/fixed/unicode.8x13.font
+echo $font
+
+# Equivalent variables for rc(1).
+home=$HOME
+#prompt="$H=;          "
+user=$USER
+
+export \
+        BROWSER\
+		PLAN9\
+		EDITOR\
+		PAGER\
+		TERM\
+        font\
+        home\
+        prompt\
+        user
+#acme -a -f $font
+
+if [ -d "$MOUNT" ];
+then
+acme -a -c $COLS -m $MOUNT &
+else
+    acme -a -c $COLS &
+fi
+
+
