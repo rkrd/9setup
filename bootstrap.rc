@@ -1,0 +1,38 @@
+#!/usr/bin/env rc
+
+pwd=`{pwd}
+
+fn link {
+    chmod +x $1
+    if (test -e $home/$1 || test -h $home/$1) {
+        printf 'Remove %s y/n?\n' $home/$1
+        if (! ~ $autoyes 1) {
+            rem=`{read}
+            if (~ $rem y)
+                rm $home/$1
+        } 
+        if not {
+            rm $home/$1
+        }
+    }
+
+    if (! test -e $home/$* || ! test -h $home/$* )
+        ln -s $pwd/$* $home/$*
+}
+
+test -d $home/bin || mkdir $home/bin
+test -d $home/lib || mkdir $home/lib
+test -d $home/mnt/acme || mkdir -p $home/mnt/acme
+test -d $home/mnt/plumb || mkdir -p $home/mnt/plumb
+
+if (~ $* y) {
+    autoyes=1
+}
+
+for (file in bin/*) {
+    link $file 
+}
+
+for (file in lib/*) {
+    link $file 
+}
